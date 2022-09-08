@@ -1,13 +1,9 @@
-import { MouseEventHandler, useEffect, useState } from 'react';
-import { Theme } from '@/models/theme';
+import { Theme, ThemeList } from '@/models/theme';
+import { useEffect, useState } from 'react';
+import Dropdown from './common/Dropdown';
 
 function ThemeSelect(): JSX.Element {
   const [theme, setTheme] = useState('light');
-  const [open, setOpen] = useState(false);
-
-  function openSelect() {
-    setOpen(!open);
-  }
 
   useEffect(() => {
     if (localStorage.theme) setTheme(localStorage.theme);
@@ -36,37 +32,12 @@ function ThemeSelect(): JSX.Element {
     }
   }, [theme]);
 
-  const handleSelectTheme: MouseEventHandler<HTMLLIElement> = e => {
-    const value = (e.target as HTMLLIElement).innerText;
-    setTheme(value);
-  };
-
   return (
-    <div className="relative inline-block">
-      <button
-        className="px-4 py-2 bg-orange-100 rounded-lg border-indigo-500 hover:bg-orange-400 hover:text-white active:bg-orange-600"
-        onClick={openSelect}
-      >
-        Theme
-      </button>
-      {open ? (
-        <ul
-          className={`absolute z-50 top-full left-0 bg-white rounded-lg ring-1 ring-slate-900/10 shadow-lg overflow-hidden w-36 py-1 text-sm text-slate-700 font-semibold dark:bg-slate-800 dark:ring-0 dark:highlight-white/5 dark:text-slate-300`}
-        >
-          {['light', 'dark', 'system'].map(t => (
-            <li
-              key={t}
-              onClick={handleSelectTheme}
-              className={`py-1 px-2 flex items-center cursor-pointer hover:text-sky-700 ${
-                t === theme ? 'text-sky-500' : ''
-              }`}
-            >
-              {t}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </div>
+    <Dropdown
+      btnContent={<strong>Theme</strong>}
+      items={ThemeList.map(t => t + '')}
+      handleSelect={t => setTheme(t)}
+    />
   );
 }
 
