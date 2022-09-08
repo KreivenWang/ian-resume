@@ -1,4 +1,5 @@
 import { MouseEventHandler, useEffect, useState } from 'react';
+import { Theme } from '@/models/theme';
 
 function ThemeSelect(): JSX.Element {
   const [theme, setTheme] = useState('light');
@@ -14,24 +15,24 @@ function ThemeSelect(): JSX.Element {
 
   useEffect(() => {
     // Whenever the user explicitly chooses light mode
-    if (theme === 'light') localStorage.theme = 'light';
+    if (theme === Theme.light) localStorage.theme = 'light';
 
     // Whenever the user explicitly chooses dark mode
-    if (theme === 'dark') localStorage.theme = 'dark';
+    if (theme === Theme.dark) localStorage.theme = 'dark';
 
     // Whenever the user explicitly chooses to respect the OS preference
-    if (theme === 'system') localStorage.removeItem('theme');
+    if (theme === Theme.system) localStorage.removeItem('theme');
 
     const mediaMatch = window.matchMedia(
       '(prefers-color-scheme: dark)'
     ).matches;
     if (
-      localStorage.theme === 'dark' ||
+      localStorage.theme === Theme.dark ||
       (!('theme' in localStorage) && mediaMatch)
     ) {
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add(Theme.dark);
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove(Theme.dark);
     }
   }, [theme]);
 
